@@ -9,11 +9,11 @@ function main_menu(vehicles){
           <div class="header-description">${vehicle.description}</div>
       </div>
       <div class="image">
-          <img src="assets/${vehicle.image}.png" alt="teste">
+          <img src="assets/${vehicle.image}.png" alt="${vehicle.model}">
       </div>
       <div class="footer">
           <div class="footer-type">${vehicle.type}</div>
-          <div class="footer-price">${vehicle.price}$</div>
+          <div class="footer-price">${vehicle.price}${Config.Currency}</div>
       </div>
     </div>
     `);
