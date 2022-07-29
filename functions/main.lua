@@ -7,7 +7,10 @@ function rent_vehicle(model, price, location)
 					if ESX.Game.IsSpawnPointClear(spawn_coords, 5) then
 						TriggerServerEvent('ry_rent:pay', price)
 						ESX.Game.SpawnVehicle(model, spawn_coords, spawn_coords.h, function(vehicle)
-							TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)  
+							TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+							Options.vehicle.hash = vehicle  
+							Options.have_rented = true
+							set_blip(false)
 						end)
 					else
 						ESX.ShowNotification(Config.Options['spawnpoint_blocked'])
@@ -16,6 +19,40 @@ function rent_vehicle(model, price, location)
 					ESX.ShowNotification(Config.Options['no_money'])
 				end
 			end, price)
+		end
+	end
+end
+
+function return_vehicle()
+	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
+		ESX.Game.DeleteVehicle(Options.vehicle.hash)
+		Options.have_rented = false
+		set_blip(true)
+		ESX.ShowNotification(Config.Options['return_success'])
+	else
+		ESX.ShowNotification(Config.Options['return_error'])
+	end
+end
+
+function set_blip(remove)
+	if remove then
+		RemoveBlip(Options.blips['return'])
+		Options.blips['return'] = nil
+	else
+		for k, v in pairs(Config.Locations) do
+			if k == Options.last_location then
+				Options.blips['return'] = AddBlipForCoord(v.return_coords.x, v.return_coords.y, v.return_coords.z)
+						
+				SetBlipSprite (Options.blips['return'], v.blips.return_spot.sprite)
+				SetBlipDisplay(Options.blips['return'], 4)
+				SetBlipScale  (Options.blips['return'], v.blips.return_spot.scale)
+				SetBlipAsShortRange(Options.blips['return'], true)
+				SetBlipColour(Options.blips['return'], v.blips.return_spot.color)
+			
+				BeginTextCommandSetBlipName("STRING")
+				AddTextComponentSubstringPlayerName(v.blips.return_spot.name)
+				EndTextCommandSetBlipName(Options.blips['return'])
+			end
 		end
 	end
 end
