@@ -59,21 +59,21 @@ Config.Vehicles = {
         price = 1000, -- price of the vehicle.
         type = 'car' -- type of the vehicle.
     },
-    ['17r35'] = { -- model name.
+    ['t20'] = { -- model name.
         label = 'Nissan GtR', -- name of vehicle in menu.
         description = 'description', -- description of vehicle in menu.
         image_name = 'gtr', -- image name in html/assets folder.
         price = 10000, -- price of the vehicle.
         type = 'car' -- type of the vehicle.
     },
-    ['bmw'] = { 
+    ['hakuchou'] = { 
         label = 'Bmw s1000',
         description = 'description',
         image_name = 'bmw',
         price = 2000,
         type = 'bike'
     },
-    ['bike'] = { 
+    ['cruiser'] = { 
         label = 'Bicycle',
         description = 'description',
         image_name = 'bike',
