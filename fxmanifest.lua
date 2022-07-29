@@ -1,5 +1,3 @@
--- by Redyy#0449
-
 fx_version 'adamant'
 game 'gta5'
 
