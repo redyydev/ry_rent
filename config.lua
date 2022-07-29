@@ -60,7 +60,7 @@ Config.Vehicles = {
         type = 'car' -- type of the vehicle.
     },
     ['17r35'] = { -- model name.
-        label = 'Nissan Gtr', -- name of vehicle in menu.
+        label = 'Nissan GtR', -- name of vehicle in menu.
         description = 'description', -- description of vehicle in menu.
         image_name = 'gtr', -- image name in html/assets folder.
         price = 10000, -- price of the vehicle.
