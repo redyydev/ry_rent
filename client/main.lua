@@ -3,14 +3,11 @@
 -- SCRIPT BY REDYY#0449
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-
-ESX = nil
 PlayerData = nil
 InMenu = false
 
 Citizen.CreateThread(function()
     Wait(100)
-	while ESX == nil do TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end) Citizen.Wait(0) end
     while ESX.GetPlayerData().job == nil do Wait(0) end
     ESX.PlayerData = ESX.GetPlayerData()
     PlayerData = ESX.GetPlayerData()
