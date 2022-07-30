@@ -3,7 +3,7 @@ function main_menu(vehicles){
   $(".vehicles").html("");
   $.each(vehicles, function(index, vehicle) {
     $(".vehicles").append(`
-    <div class="vehicle" id="vehicle-${vehicle.model}">
+    <div class="vehicle" id="vehicle-${vehicle.id}">
       <div class="header">
           <div class="header-title">${vehicle.label}</div>
           <div class="header-description">${vehicle.description}</div>
@@ -18,7 +18,7 @@ function main_menu(vehicles){
     </div>
     `);
 
-    $(`#vehicle-${vehicle.model}`).click(function () {
+    $(`#vehicle-${vehicle.id}`).click(function () {
       $.post('https://ry_rent/rent', JSON.stringify({
           model: vehicle.model,
           price: vehicle.price,

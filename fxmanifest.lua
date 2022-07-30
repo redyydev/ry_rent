@@ -2,9 +2,11 @@ fx_version 'adamant'
 game 'gta5'
 
 author 'Redyy'
-version '1.0'
+version '1.2'
 
 ui_page {'html/index.html'}
+
+shared_scripts {'@es_extended/imports.lua'}
 
 client_script {
     'config.lua',

@@ -76,7 +76,8 @@ Config.Locations = {
 
 
 Config.Vehicles = {
-    ['zentorno'] = { -- vehicle spawn model name.
+    [1] = { 
+        model = 'zentorno', -- vehicle spawn model name.
         label = 'mercedes amg 2', -- name of vehicle in menu.
         description = 'description', -- description of vehicle in menu.
         image_name = 'amg', -- image name in html/assets folder.
@@ -86,29 +87,66 @@ Config.Vehicles = {
         price = 1000, -- price of the vehicle.
         type = 'car' -- type of the vehicle.
     },
-    ['t20'] = { -- model name.
+    [2] = { -- model name.
+        model = 't20', -- vehicle spawn model name.
         label = 'Nissan GtR', -- name of vehicle in menu.
         description = 'description', -- description of vehicle in menu.
         image_name = 'gtr', -- image name in html/assets folder.
-        price = 10000, -- price of the vehicle.
+        -- IMAGE RESOLUTION --
+        -- 310x250 Pixels --
+        -- IMAGE RESOLUTION --
+        price = 1000000, -- price of the vehicle.
         type = 'car' -- type of the vehicle.
     },
-    ['hakuchou'] = { 
+    [3] = { 
+        model = 'hakuchou', 
         label = 'Bmw s1000',
         description = 'description',
         image_name = 'bmw',
         price = 2000,
         type = 'bike'
     },
-    ['cruiser'] = { 
+    [4] = { 
+        model = 'cruiser',
         label = 'Bicycle',
         description = 'description',
         image_name = 'bike',
         price = 200,
         type = 'bicycle'
     },
-    -- max of 4 vehicles --
-    -- if you add more it won't show in the menu --
+    -- More Examples --
+    [5] = { 
+        model = 'cruiser',
+        label = 'Bicycle',
+        description = 'description',
+        image_name = 'bike',
+        price = 200,
+        type = 'bicycle'
+    },
+    [6] = { 
+        model = 'cruiser',
+        label = 'Bicycle',
+        description = 'description',
+        image_name = 'bike',
+        price = 200,
+        type = 'bicycle'
+    },
+    [7] = { 
+        model = 'cruiser',
+        label = 'Bicycle',
+        description = 'description',
+        image_name = 'bike',
+        price = 200,
+        type = 'bicycle'
+    },
+    [8] = { 
+        model = 'cruiser',
+        label = 'Bicycle',
+        description = 'description',
+        image_name = 'bike',
+        price = 200,
+        type = 'bicycle'
+    },
 }
 
 

@@ -17,7 +17,7 @@ ESX.RegisterServerCallback('ry_rent:check', function(source, cb, amount)
 	local xPlayer = ESX.GetPlayerFromId(_source)
 
   if xPlayer ~= nil then
-		if xPlayer.getMoney() >= tonumber(amount) then
+		if xPlayer.getAccount('money').money >= tonumber(amount) then
 			cb(true)
 		else
 			cb(false)

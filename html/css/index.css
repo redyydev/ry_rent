@@ -46,6 +46,8 @@ body, input, button {
 .vehicles{
   width: 100%;
   height: 550px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 .vehicle {
@@ -59,6 +61,7 @@ body, input, button {
   border-radius: 5px;
   box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
   transition: all 0.2s ease 0s;
+  margin-bottom: 25px;
 }
 
 .vehicle:hover{
@@ -119,3 +122,18 @@ body, input, button {
   font-size: 23px;
   letter-spacing: 2px;
 } 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(87, 87, 87, 0.2);
+  border-radius: 10px;
+}
