@@ -62,7 +62,7 @@ function open_ui(location)
 	local vehicles = {}
 
 	for k,v in pairs(Config.Vehicles) do 
-		table.insert(vehicles, {location = location,  model = k, label = v.label, description = v.description, price = v.price, type = v.type, image = v.image_name})
+		table.insert(vehicles, {location = location, id= k,  model = v.model, label = v.label, description = v.description, price = v.price, type = v.type, image = v.image_name})
 	end
 
 	TriggerScreenblurFadeIn(1)
