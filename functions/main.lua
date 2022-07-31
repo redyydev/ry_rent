@@ -104,9 +104,6 @@ function close_ui()
 	InMenu = false
 end
 
-RegisterCommand("timer", function(source, args, rawCommand)
-		show_timer()
-end, false)
 
 
 
