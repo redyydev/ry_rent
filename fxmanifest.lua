@@ -2,7 +2,7 @@ fx_version 'adamant'
 game 'gta5'
 
 author 'Redyy'
-version '1.3'
+version '1.4'
 
 ui_page {'html/index.html'}
 
