@@ -34,7 +34,6 @@ body, input, button {
   background-color: rgba(17, 25, 40, 0.71);
   transition: all 0.2s ease 0s;
   box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
-  overflow: hidden;
   z-index: 9999999;
   border-radius: 7px;
   position: fixed;
@@ -148,6 +147,18 @@ body, input, button {
   height: 80px;
 }
 
+.time-options {
+  position: fixed;
+  right: -5%;
+  top: 87%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
+  border-radius: 5px;
+  width: 200px;
+  height: 50px;
+}
+
 .info-title {
   margin-top: 10px;
   margin-left: 5px;
@@ -160,9 +171,27 @@ body, input, button {
 .time {
   margin-left: 20px;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   font-size: 14px;
   color: rgb(160, 160, 160);
   opacity: 0.4;
   text-transform: uppercase;
+}
+
+@keyframes alert {
+  0% {
+      color: rgba(255, 255, 255, 0.5);
+  }
+
+  1% {
+      color: red;
+  }
+
+  5% {
+    color: rgb(255, 145, 0);
+  }
+
+  100% {
+      color: rgba(255, 255, 255, 0.5);
+  }
 }
