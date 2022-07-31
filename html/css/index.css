@@ -122,18 +122,47 @@ body, input, button {
   font-size: 23px;
   letter-spacing: 2px;
 } 
-/* width */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   border-radius: 10px;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgba(87, 87, 87, 0.2);
   border-radius: 10px;
+}
+
+.container-timer {
+  position: fixed;
+  right: -5%;
+  top: 80%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(17, 25, 40, 0.71);
+  box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
+  border-radius: 5px;
+  width: 200px;
+  height: 80px;
+}
+
+.info-title {
+  margin-top: 10px;
+  margin-left: 5px;
+  padding: 10px;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.time {
+  margin-left: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 14px;
+  color: rgb(160, 160, 160);
+  opacity: 0.4;
+  text-transform: uppercase;
 }

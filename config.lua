@@ -1,10 +1,17 @@
 Config = {}
 
 Config.Options = {
+    ['time'] = true, -- if true it actives the timer rent. False to disabled it. Default true.
+    ['time_rent'] = 120, -- seconds the player get when rent a vehicle. Default 120 seconds | 2 minutes.
+    ['delete_vehicle'] = true, -- delete vehicle when rent time is finished and not delivered? Default true
+    ['delete_time'] = 25000, -- time in MS that vehicle will be deleted if delete function is active and after time is finished. Default 25000MS | 25Seconds. 
+
+    ['time_finished'] = 'Your rental time is up, thank you.',
     ['spawnpoint_blocked'] = 'Another vehicle is taking the spawn place.',  -- message when spawn_point is blocked by other vehicle.
     ['no_money'] = 'You dont have enought money to rent the vehicle.', -- message when don't have money.
     ['return_success'] = 'Successfully returned the vehicle, thank you!', -- message when return the vehicle is Successfully.
     ['return_error'] = 'You need to be in the vehicle you rented.', -- message when the player its not in rented vehicle.
+    ['cant_rent'] = 'You already rented a vehicle', -- message when the player already have a rented vehicle.
 }
 
 Config.Locations = {
@@ -18,6 +25,7 @@ Config.Locations = {
                 type = 2, -- type of marker.
                 size  = {x = 0.3, y = 0.3, z = 0.3},  -- size of marker.
                 color = {r = 255, g = 255, b = 255},  -- color of marker.
+                text = '[ ~g~E~w~ ] Rent Vehicle', -- text of marker.
                 text = '[ ~g~E~w~ ] Rent Vehicle' -- text of marker.
             },
             return_spot = {

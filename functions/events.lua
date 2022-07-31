@@ -6,6 +6,10 @@ RegisterNUICallback("rent",function(data)
     rent_vehicle(model, price, location)
 end)
 
+RegisterNUICallback("finish",function(data)
+    finish()
+end)
+
 RegisterNUICallback("CloseUI",function()
     close_ui()
 end)

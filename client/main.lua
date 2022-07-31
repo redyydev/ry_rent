@@ -1,4 +1,3 @@
-ESX = exports.es_extended:getSharedObject()
 InMenu = false
 sleep = true
 
@@ -24,10 +23,14 @@ Citizen.CreateThread(function()
 
                     if distance < 1 then
                         sleep = false
-                        DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, v.markers.spawn.text)
-                        if IsControlJustReleased(0, v.markers.spawn.key) then
-                            Options.last_location = k
-                            open_ui(k)
+                        if Options.have_rented then
+                            DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, Config.Options['cant_rent'])
+                        else
+                            DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, v.markers.spawn.text)
+                            if IsControlJustReleased(0, v.markers.spawn.key) then
+                                Options.last_location = k
+                                open_ui(k)
+                            end
                         end
                     end
 

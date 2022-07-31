@@ -1,25 +1,26 @@
---
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-
 RegisterServerEvent('ry_rent:pay')
 AddEventHandler('ry_rent:pay', function(amount)
 	local _source = source
-  local xPlayer = ESX.GetPlayerFromId(_source)
-	
-  xPlayer.removeMoney(tonumber(amount))
-  TriggerClientEvent('esx:showNotification', source, 'You paid ~g~' .. amount .. '~w~$ to rent the vehicle.')
+	local xPlayer = ESX.GetPlayerFromId(_source)
+  local Money = xPlayer.getAccount('money').money
+
+  if Money >= amount then 
+    xPlayer.removeMoney(tonumber(amount))
+    TriggerClientEvent('esx:showNotification', source, 'You paid ~g~' .. amount .. '~w~$ to rent the vehicle.')
+	end
 end)
 
 ESX.RegisterServerCallback('ry_rent:check', function(source, cb, amount)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
+	local Money = xPlayer.getAccount('money').money
 
   if xPlayer ~= nil then
-		if xPlayer.getAccount('money').money >= tonumber(amount) then
+		if Money >= amount then
 			cb(true)
 		else
 			cb(false)
+			TriggerClientEvent('esx:showNotification', source, Config.Options['no_money'])
 		end
 	end
 end)

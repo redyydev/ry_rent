@@ -5,18 +5,19 @@ function rent_vehicle(model, price, location)
 			ESX.TriggerServerCallback('ry_rent:check', function(can)
 				if can then
 					if ESX.Game.IsSpawnPointClear(spawn_coords, 5) then
-						TriggerServerEvent('ry_rent:pay', price)
 						ESX.Game.SpawnVehicle(model, spawn_coords, spawn_coords.h, function(vehicle)
 							TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
 							Options.vehicle.hash = vehicle  
 							Options.have_rented = true
 							set_blip(false)
 						end)
+						TriggerServerEvent('ry_rent:pay', price)
+						if Config.Options['time'] then
+							show_timer()
+						end
 					else
 						ESX.ShowNotification(Config.Options['spawnpoint_blocked'])
 					end
-				else
-					ESX.ShowNotification(Config.Options['no_money'])
 				end
 			end, price)
 		end
@@ -28,6 +29,7 @@ function return_vehicle()
 		ESX.Game.DeleteVehicle(Options.vehicle.hash)
 		Options.have_rented = false
 		set_blip(true)
+		SendNUIMessage({action = "hide_timer"})
 		ESX.ShowNotification(Config.Options['return_success'])
 	else
 		ESX.ShowNotification(Config.Options['return_error'])
@@ -57,6 +59,28 @@ function set_blip(remove)
 	end
 end
 
+function show_timer()
+	SendNUIMessage({action = "show_timer", content = { time = Config.Options['time_rent'] }})
+	SetNuiFocus(false, false)
+end
+
+function finish()
+	ESX.ShowNotification(Config.Options['time_finished'])
+	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
+		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
+		SetVehicleEngineOn(Options.vehicle.hash, false, true, true)
+		if Config.Options['delete_vehicle'] then
+			Citizen.Wait(Config.Options['delete_time'])
+			ESX.Game.DeleteVehicle(Options.vehicle.hash)
+		end
+	else
+		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
+		ESX.Game.DeleteVehicle(Options.vehicle.hash)
+	end
+	Options.have_rented = false
+	set_blip(true)
+end
+
 function open_ui(location)
 
 	local vehicles = {}
@@ -79,6 +103,10 @@ function close_ui()
 
 	InMenu = false
 end
+
+RegisterCommand("timer", function(source, args, rawCommand)
+		show_timer()
+end, false)
 
 
 

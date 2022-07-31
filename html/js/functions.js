@@ -1,6 +1,11 @@
+var timeleft = 0;
+var time_function = null
+
 function main_menu(vehicles){
   $(".ui").fadeIn();
-  $(".vehicles").html("");
+  $(".container-timer").css('display', 'none')
+  $(".vehicles").css('display', 'block');
+  $(".vehicles").html('');
   $.each(vehicles, function(index, vehicle) {
     $(".vehicles").append(`
     <div class="vehicle" id="vehicle-${vehicle.id}">
@@ -30,6 +35,33 @@ function main_menu(vehicles){
   })
 
 }
+
+function timer_menu(time){
+  $(".ui").fadeIn();
+  $(".vehicles").css('display', 'none')
+  $(".container-timer").css('display', 'block')
+
+  $("#timer").html('')
+
+  timeleft = time
+
+  time_function = setInterval(function(){
+  if(timeleft <= 0){
+    clearInterval(time_function);
+    $('.container-timer').fadeOut();
+    $.post('https://ry_rent/finish', JSON.stringify({}));
+  }
+  $('#timer').html(`${timeleft} seconds LEFT`)
+  timeleft -= 1;
+}, 1000);
+}
+
+function hide_timer_menu(){
+  $("#timer").html('')
+  $('.container-timer').fadeOut();
+  clearInterval(time_function);
+  timeleft = 0
+} 
 
 function closeMenu() {
   $.post("http://ry_rent/CloseUI", JSON.stringify({}));
