@@ -69,6 +69,7 @@ function finish()
 	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
 		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
 		SetVehicleEngineOn(Options.vehicle.hash, false, true, true)
+		SetVehicleDoorsLocked(Options.vehicle.hash, 2)
 		if Config.Options['delete_vehicle'] then
 			Citizen.Wait(Config.Options['delete_time'])
 			ESX.Game.DeleteVehicle(Options.vehicle.hash)
