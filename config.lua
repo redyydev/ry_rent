@@ -2,7 +2,7 @@ Config = {}
 
 Config.Options = {
     ['time'] = true, -- if true it actives the timer rent. False to disabled it. Default true.
-    ['time_rent'] = 10, -- seconds the player get when rent a vehicle. Default 120 seconds | 2 minutes.
+    ['time_rent'] = 120, -- seconds the player get when rent a vehicle. Default 120 seconds | 2 minutes.
     ['delete_vehicle'] = true, -- delete vehicle when rent time is finished and not delivered? Default true
     ['delete_time'] = 25000, -- time in MS that vehicle will be deleted if delete function is active and after time is finished. Default 25000MS | 25Seconds. 
 
