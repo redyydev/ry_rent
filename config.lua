@@ -52,71 +52,7 @@ Config.Locations = {
             
         }
     },
-    ['lossantosavenue2'] = { -- name of the location, you can put whatever you like.
-        coords = vector3(81.78,-1614.96,29.73), -- coord for the menu.
-        spawn_coords = {x =-1024.80, y =-2734.81, z=20.09, h=243.77}, -- coord where vehicle will spawn.
-        return_coords = vector3(-1032.65,-2732.00,20.16), -- coord for return the vehicle.
-        markers = {
-            spawn = {
-                key = 38, -- key to open the menu. Default E
-                type = 2, -- type of marker.
-                size  = {x = 0.3, y = 0.3, z = 0.3},  -- size of marker.
-                color = {r = 255, g = 255, b = 255},  -- color of marker.
-                text = '[ ~g~E~w~ ] Rent Vehicle', -- text of marker.
-                text = '[ ~g~E~w~ ] Rent Vehicle' -- text of marker.
-            },
-            return_spot = {
-                key = 47, -- key to open the menu. Default G
-                type = 2, -- type of marker.
-                size  = {x = 0.3, y = 0.3, z = 0.3},  -- size of marker.
-                color = {r = 255, g = 0, b = 0},  -- color of marker.
-                text = '[ ~r~G~w~ ] Return Vehicle' -- text of marker.
-            }
-        },
-        blips = {
-            spawn = {
-                name = 'Rent Vehicle', -- name of the blip in map.
-                sprite = 523, -- sprite of the blip.
-                scale = 0.8, -- scale of the.
-                color = 2 -- color of the. 
-            },
-            return_spot = {
-                name = 'Return rented Vehicle', -- name of the return blip in map.
-                sprite = 523, -- sprite of the return blip.
-                scale = 0.8, -- scale of the return blip.
-                color = 4 -- color of the return blip. 
-            }
-            
-        }
-    },
-    -- Other Example --
-    -- ['location2'] = { -- name of the location, you can put whatever you like.
-        -- coords = vector3(244.65,-1569.90,29.12), -- coord for the menu.
-        -- spawn_coords = {x =234.39, y =-1575.83, z=29.12, h=113.38}, -- coord where vehicle will spawn.
-        -- return_coords = vector3(221.32,-1583.36,29.14), -- coord for return the vehicle.
-        -- markers = {
-          --   spawn = {
-           --      key = 38, -- key to open the menu. Default E
-            --     type = 2, -- type of marker.
-            --     size  = {x = 0.3, y = 0.3, z = 0.3},  -- size of marker.
-            --     color = {r = 255, g = 255, b = 255},  -- color of marker.
-             --    text = '[ ~g~E~w~ ] Rent Vehicle' -- text of marker.
-            -- },
-            -- return_spot = {
-             --    key = 47, -- key to open the menu. Default G
-             --    type = 2, -- type of marker.
-             --    size  = {x = 0.3, y = 0.3, z = 0.3},  -- size of marker.
-              --   color = {r = 255, g = 0, b = 0},  -- color of marker.
-              --   text = '[ ~r~G~w~ ] Return Vehicle' -- text of marker.
-            -- }
-        -- },
-        -- blip = {
-          --   name = 'Rent Vehicle', -- name of the blip in map.
-          --   sprite = 523, -- sprite of the blip.
-          --   scale = 0.8, -- scale of the.
-          --   color = 2 -- color of the. 
-       --  }
-    -- },
+    -- more --
 }
 
 

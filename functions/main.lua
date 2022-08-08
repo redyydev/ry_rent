@@ -4,8 +4,13 @@ function rent_vehicle(model, price, location)
 			local spawn_coords = v.spawn_coords
 			ESX.TriggerServerCallback('ry_rent:check', function(can)
 				if can then
+					RequestModel(model) 
+					while not HasModelLoaded(model) do
+						Citizen.Wait(10)
+					end
 					if ESX.Game.IsSpawnPointClear(spawn_coords, 5) then
 						ESX.Game.SpawnVehicle(model, spawn_coords, spawn_coords.h, function(vehicle)
+							SetEntityAsMissionEntity(vehicle, true, true)
 							TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
 							Options.vehicle.hash = vehicle  
 							Options.have_rented = true
@@ -16,7 +21,7 @@ function rent_vehicle(model, price, location)
 							show_timer()
 						end
 					else
-						ESX.ShowNotification(Config.Options['spawnpoint_blocked'])
+						Notification(Config.Options['spawnpoint_blocked'])
 					end
 				end
 			end, price)
@@ -26,13 +31,16 @@ end
 
 function return_vehicle()
 	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
-		ESX.Game.DeleteVehicle(Options.vehicle.hash)
+		delete_vehicle(Options.vehicle.hash)
+
+		Options.vehicle.hash = nil
 		Options.have_rented = false
+
 		set_blip(true)
 		SendNUIMessage({action = "hide_timer"})
-		ESX.ShowNotification(Config.Options['return_success'])
+		Notification(Config.Options['return_success'])
 	else
-		ESX.ShowNotification(Config.Options['return_error'])
+		Notification(Config.Options['return_error'])
 	end
 end
 
@@ -65,25 +73,34 @@ function show_timer()
 end
 
 function finish()
-	ESX.ShowNotification(Config.Options['time_finished'])
+	Notification(Config.Options['time_finished'])
 	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
 		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
 		SetVehicleEngineOn(Options.vehicle.hash, false, true, true)
 		SetVehicleDoorsLocked(Options.vehicle.hash, 2)
 		if Config.Options['delete_vehicle'] then
 			Citizen.Wait(Config.Options['delete_time'])
-			ESX.Game.DeleteVehicle(Options.vehicle.hash)
+			delete_vehicle(Options.vehicle.hash)
 		end
 	else
 		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
-		ESX.Game.DeleteVehicle(Options.vehicle.hash)
+		delete_vehicle(Options.vehicle.hash)
 	end
 	Options.have_rented = false
 	set_blip(true)
 end
 
-function open_ui(location)
+function delete_vehicle(vehicle)
+	DeleteVehicle(vehicle)
+end
 
+function Notification(text)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawNotification(false, false)
+end
+
+function open_ui(location)
 	local vehicles = {}
 
 	for k,v in pairs(Config.Vehicles) do 
