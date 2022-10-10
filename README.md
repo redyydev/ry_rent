@@ -1,5 +1,8 @@
-# ry_rent
+# RY_RENT
+A fully configurable and customizable vehicle rental system.
 
+![alt text](https://imgur.com/Ft2y0L3.png)
+ 
 **IMPORTANT**
 
 - Change the name of the folder to ry_rent or it won't work
