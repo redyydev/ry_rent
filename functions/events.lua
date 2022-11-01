@@ -2,13 +2,15 @@ RegisterNUICallback("rent",function(data)
     local model = data.model
     local price = data.price
     local location = data.location
-    rent_vehicle(model, price, location)
+    local r,g,b = data.r, data.g, data.b
+
+    rentVehicle(model, price, location, r, g, b)
 end)
 
-RegisterNUICallback("finish",function(data)
-    finish()
+RegisterNUICallback("finishRent",function(data)
+    finishRent()
 end)
 
 RegisterNUICallback("CloseUI",function()
-    close_ui()
+    closeUi()
 end)

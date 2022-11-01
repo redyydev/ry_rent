@@ -5,7 +5,8 @@ Options = {
     vehicle = {hash = 0},
     last_location = '',
     have_rented = false,
-    blips = {}
+    blips = {},
+    pricePaid = 0,
 }
 
 Citizen.CreateThread(function()
@@ -22,7 +23,7 @@ Citizen.CreateThread(function()
                     if distance < 1 then
                         sleep = false
                         if Options.have_rented then
-                            DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, Config.Options['cant_rent'])
+                            DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, Config.Options.cantRent)
                         else
                             DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, v.markers.spawn.text)
                             if IsControlJustReleased(0, v.markers.spawn.key) then
@@ -42,12 +43,13 @@ Citizen.CreateThread(function()
                             sleep = false
                             DrawText3D(v.return_coords.x, v.return_coords.y, v.return_coords.z + 0.25, v.markers.return_spot.text)
                             if IsControlJustReleased(0, v.markers.return_spot.key) then
-                                return_vehicle()
+                                returnVehicle(playerPed)
                             end
                         end
+    
                         if return_distance <= 15 then
                             sleep = false
-                            DrawMarker(v.markers.return_spot.type, v.return_coords.x, v.return_coords.y, v.return_coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.markers.return_spot.size.x, v.markers.return_spot.size.y, v.markers.return_spot.size.z, v.markers.return_spot.color.r, v.markers.return_spot.color.g, v.markers.return_spot.color.b, 50, false, true, 2, false, nil, nil, false)
+                             DrawMarker(v.markers.return_spot.type, v.return_coords.x, v.return_coords.y, v.return_coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.markers.return_spot.size.x, v.markers.return_spot.size.y, v.markers.return_spot.size.z, v.markers.return_spot.color.r, v.markers.return_spot.color.g, v.markers.return_spot.color.b, 50, false, true, 2, false, nil, nil, false)
                         end
                     end
             end

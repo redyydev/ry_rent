@@ -27,6 +27,8 @@ body, input, button {
   height:100%;
   display: flex;
   align-items: center;
+  background: rgb(0,0,0);
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.11248249299719892) 50%, rgba(0,0,0,1) 100%);
 }
 
 .content {
@@ -35,11 +37,105 @@ body, input, button {
   transition: all 0.2s ease 0s;
   box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
   z-index: 9999999;
-  border-radius: 7px;
+  border-radius: 5px;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.options {
+  width: 300px;
+  background-color: rgba(17, 25, 40, 0.71);
+  transition: all 0.2s ease 0s;
+  box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
+  z-index: 9999999;
+  border-radius: 5px;
+  position: fixed;
+  height: 200px;
+  left: 65%;
+  top: 87%;
+  transform: translate(-50%, -50%);
+}
+
+.options .colors {
+  margin-top: 30px;
+  width: 100%;
+  height: 100px;
+  max-height: 150px;
+  margin-bottom: 10px;
+}
+
+.options .buttons {
+  margin-top: 20px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.options .buttons button {
+  transition: all 0.2s ease 0s;
+  color: #fff;
+  height: 50px;
+  width: 95%;
+  margin-left: 7px;
+  border-radius: 5px;
+  background: rgba(87, 87, 87, 0.2);
+  text-align: center;
+  border: 0;
+  box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  margin-top: 0px;
+}
+
+.options .option-exit {
+  position: absolute;
+  list-style-type: none;
+  margin-bottom: 5px;
+  transition: all 0.2s ease 0s;
+  font-weight: lighter;
+  color: white;
+  float: left;
+  letter-spacing: 1px;
+  background: var(--global-color);
+  border-radius: 5px;
+  text-align: center;
+  height: 30px;
+  width: 30px;
+  margin-left: 270px;
+  margin-top: -25px;
+  font-size: 1.2em;
+  vertical-align: middle;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.options .option-exit:hover {
+  opacity: 1.0;
+}
+
+.options .buttons button:hover{
+  background: rgba(87, 87, 87, 0.4);
+}
+
+.options .buttons span {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.options .option-color {
+  float: left;
+  transition: all 0.2s ease 0s;
+  width: 35px;
+  height: 35px;
+  box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+  margin-left: 20px;
+  border: 2px solid rgba(255, 255, 255, 0);
 }
 
 .vehicles{
@@ -56,11 +152,11 @@ body, input, button {
   background: rgba(87, 87, 87, 0.2);
   margin-top: 1.5vw;
   margin-left: 1.1vw;
-  border: 0;
   border-radius: 5px;
   box-shadow: 2px 5px 10px 0 rgba(0,0,0,0.20);
   transition: all 0.2s ease 0s;
   margin-bottom: 25px;
+  border: 1px solid rgba(255, 255, 255, 0);
 }
 
 .vehicle:hover{

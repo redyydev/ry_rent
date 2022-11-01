@@ -1,50 +1,114 @@
-function rent_vehicle(model, price, location)
-	for k,v in pairs(Config.Locations) do 
+function open_ui(location)
+	local vehicles = {}
+
+	for k,v in pairs(Config.Locations[location].vehicles) do 
+		table.insert(vehicles, {location = location, id= k,  model = v.model, label = v.label, description = v.description, price = v.price, type = v.type, image = v.image_name})
+	end
+
+	TriggerScreenblurFadeIn(1)
+	SendNUIMessage({action = 'open', content = { vehicles = vehicles }})
+	SetNuiFocus(true, true)
+
+	InMenu = true
+end
+
+function rentVehicle(model, price, location, r,g,b)
+	Options.pricePaid = 0
+
+	for k,v in pairs(Config.Locations) do
 		if k == location then
-			local spawn_coords = v.spawn_coords
-			ESX.TriggerServerCallback('ry_rent:check', function(can)
-				if can then
-					RequestModel(model) 
+			local spawnCoords = v.spawn_coords
+			ESX.TriggerServerCallback('ry_rent:check', function(have_money)
+				if have_money then
+					RequestModel(model)
+					
 					while not HasModelLoaded(model) do
 						Citizen.Wait(10)
 					end
-					if ESX.Game.IsSpawnPointClear(spawn_coords, 5) then
-						ESX.Game.SpawnVehicle(model, spawn_coords, spawn_coords.h, function(vehicle)
+					
+					if ESX.Game.IsSpawnPointClear(spawnCoords, 5) then
+						TriggerServerEvent('ry_rent:pay', price)
+						Options.pricePaid = price
+
+						ESX.Game.SpawnVehicle(model, spawnCoords, spawnCoords.h, function(vehicle)
 							SetEntityAsMissionEntity(vehicle, true, true)
 							TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+
+							SetVehicleCustomPrimaryColour(vehicle, r, g, b)
+							SetVehicleCustomSecondaryColour(vehicle, 0, 0, 0)
+
 							Options.vehicle.hash = vehicle  
 							Options.have_rented = true
-							set_blip(false)
 						end)
-						TriggerServerEvent('ry_rent:pay', price)
-						if Config.Options['time'] then
-							show_timer()
+
+						changeBlip(false)
+						closeUi()
+						
+						if Config.Options.showTimer then
+							showTimer()
 						end
 					else
-						Notification(Config.Options['spawnpoint_blocked'])
+						Notification(Config.Options.spawnPointBlocked)
 					end
+
+				else
+					Notification(Config.Options.donthaveMoney)
 				end
 			end, price)
 		end
 	end
 end
 
-function return_vehicle()
-	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
-		delete_vehicle(Options.vehicle.hash)
+function returnVehicle(player)
+	if IsPedSittingInVehicle(player, Options.vehicle.hash) then
+		deleteVehicle(Options.vehicle.hash)
 
 		Options.vehicle.hash = nil
 		Options.have_rented = false
 
-		set_blip(true)
+		changeBlip(true)
 		SendNUIMessage({action = "hide_timer"})
-		Notification(Config.Options['return_success'])
+
+		if Config.Options.refundMoneyWhenDelivered then
+			TriggerServerEvent('ry_rent:pay', Options.pricePaid, true)
+		end
+
+		Notification(Config.Options.returnSuccess)
 	else
-		Notification(Config.Options['return_error'])
+		Notification(Config.Options.returnError)
 	end
 end
 
-function set_blip(remove)
+function finishRent()
+	Notification(Config.Options.rentFinished)
+
+	Options.have_rented = false
+	changeBlip(true)
+
+	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
+		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
+		SetVehicleEngineOn(Options.vehicle.hash, false, true, true)
+		SetVehicleDoorsLocked(Options.vehicle.hash, 2)
+		if Config.Options.deleteVehicleWhenFinished then
+			Citizen.Wait(Config.Options.deleteTime)
+			deleteVehicle(Options.vehicle.hash)
+		end
+	else
+		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
+		deleteVehicle(Options.vehicle.hash)
+	end
+end
+
+function deleteVehicle(vehicle)
+	DeleteVehicle(vehicle)
+end
+
+function showTimer() 
+	SendNUIMessage({action = "show_timer", content = { time = Config.Options.timeRent }})
+	SetNuiFocus(false, false)
+end
+
+function changeBlip(remove)
 	if remove then
 		RemoveBlip(Options.blips['return'])
 		Options.blips['return'] = nil
@@ -67,54 +131,13 @@ function set_blip(remove)
 	end
 end
 
-function show_timer()
-	SendNUIMessage({action = "show_timer", content = { time = Config.Options['time_rent'] }})
-	SetNuiFocus(false, false)
-end
-
-function finish()
-	Notification(Config.Options['time_finished'])
-	if IsPedSittingInVehicle(GetPlayerPed(-1), Options.vehicle.hash) then
-		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
-		SetVehicleEngineOn(Options.vehicle.hash, false, true, true)
-		SetVehicleDoorsLocked(Options.vehicle.hash, 2)
-		if Config.Options['delete_vehicle'] then
-			Citizen.Wait(Config.Options['delete_time'])
-			delete_vehicle(Options.vehicle.hash)
-		end
-	else
-		SetVehicleEngineHealth(Options.vehicle.hash, -4000)
-		delete_vehicle(Options.vehicle.hash)
-	end
-	Options.have_rented = false
-	set_blip(true)
-end
-
-function delete_vehicle(vehicle)
-	DeleteVehicle(vehicle)
-end
-
 function Notification(text)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(text)
 	DrawNotification(false, false)
 end
 
-function open_ui(location)
-	local vehicles = {}
-
-	for k,v in pairs(Config.Vehicles) do 
-		table.insert(vehicles, {location = location, id= k,  model = v.model, label = v.label, description = v.description, price = v.price, type = v.type, image = v.image_name})
-	end
-
-	TriggerScreenblurFadeIn(1)
-	SendNUIMessage({action = 'open', content = { vehicles = vehicles }})
-	SetNuiFocus(true, true)
-
-	InMenu = true
-end
-
-function close_ui()
+function closeUi()
   TriggerScreenblurFadeOut(1000)
 	SendNUIMessage({action = "close"})
 	SetNuiFocus(false, false)
