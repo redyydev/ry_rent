@@ -1,8 +1,6 @@
 InMenu = false
 sleep = true
 
-local tete = ''
-
 Options = {
     vehicle = {hash = 0},
     last_location = '',
