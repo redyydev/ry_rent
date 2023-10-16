@@ -1,6 +1,7 @@
 InMenu = false
 sleep = true
-local tete = teste
+
+local tete = ''
 
 Options = {
     vehicle = {hash = 0},
