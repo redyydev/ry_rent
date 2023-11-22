@@ -74,12 +74,13 @@ function rentVehicle(vehicleID, vehicleRentalPrice, vehicleColor, vehicleMaxPerf
 				cache.vehicleRented = vehicle
 			end)
 		end
+		TriggerServerEvent('ry_rent:removeMoney', vehicleRentalPrice)
+		
 		cache.haveRented = true
 		cache.pricePaid = vehicleRentalPrice
-
+		
 		closeMenu()
 		returnBlip(false)
-
 		if RY.Options.enableRentTimer then
 			showTimer()
 		end
