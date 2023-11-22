@@ -30,7 +30,7 @@ RegisterNetEvent('ry-vehiclerental:checkMoney', function(amount)
             if tonumber(playerMoney) >= amount then
                 TriggerClientEvent('ry-vehiclerental:sendhaveMoney', _source, true)
             else
-                TriggerClientEvent('ry-vehiclerental:sendhaveMoney', _source, true)
+                TriggerClientEvent('ry-vehiclerental:sendhaveMoney', _source, false)
             end
         end
     end
