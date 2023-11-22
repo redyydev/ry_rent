@@ -1,74 +1,114 @@
-InMenu = false
-sleep = true
-
-Options = {
-    vehicle = {hash = 0},
-    last_location = '',
-    have_rented = false,
-    blips = {},
+Framework = nil
+inMenu = false
+sleepWait = true
+cache = {
+    lastLocation = nil,
+    haveMoney = false,
+    haveRented = false,
     pricePaid = 0,
+    vehicleRented = nil,
+    blips = {}
 }
 
-Citizen.CreateThread(function()
-    while true do 
-        Citizen.Wait(1)
-        sleep = true
-		local playerPed = PlayerPedId()
-		local coords = GetEntityCoords(playerPed)
-        for k,v in pairs(Config.Locations) do
-            if not InMenu then
-                local distance = #(coords - v.coords)
-                local return_distance = #(coords - v.return_coords) 
+if RY.Options.FrameWork == 'esx' then
+    Framework = exports['es_extended']:getSharedObject()   
+elseif RY.Options.FrameWork == 'qb' then
+    Framework = exports['qb-core']:GetCoreObject()
+end
 
-                    if distance < 1 then
-                        sleep = false
-                        if Options.have_rented then
-                            DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, Config.Options.cantRent)
+if not RY.Options.oxTarget.enable then
+    Citizen.CreateThread(function()
+        while true do 
+            Citizen.Wait(1)
+            sleepWait = true
+            local playerPed = PlayerPedId()
+            local playerCoords = GetEntityCoords(playerPed)
+    
+            if not InMenu then
+                for k,v in pairs(RY.Locations) do
+                    local distanceBetwennPlayerAndMenu = #(playerCoords - v.menuCoords)        
+                    local distanceBetwennPlayerAndReturnMenu = #(playerCoords - v.returnVehicleCoords)      
+
+                    if distanceBetwennPlayerAndMenu < 1 then
+                        sleepWait = false
+                        if cache.haveRented then
+                            DrawText3D(v.menuCoords.x, v.menuCoords.y, v.menuCoords.z + 0.25, RY.Messages.alreadyRented)                        
                         else
-                            DrawText3D(v.coords.x, v.coords.y, v.coords.z + 0.25, v.markers.spawn.text)
-                            if IsControlJustReleased(0, v.markers.spawn.key) then
-                                Options.last_location = k
-                                open_ui(k)
+                            DrawText3D(v.menuCoords.x, v.menuCoords.y, v.menuCoords.z + 0.25, v.markersConfig.markerMenu.markerText)                        
+                            if IsControlJustReleased(0, v.markersConfig.markerMenu.useKey) then
+                                openMenu(k)
                             end
                         end
                     end
-
-                    if distance <= 15 then
-                        sleep = false
-                        DrawMarker(v.markers.spawn.type, v.coords.x, v.coords.y, v.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.markers.spawn.size.x, v.markers.spawn.size.y, v.markers.spawn.size.z, v.markers.spawn.color.r, v.markers.spawn.color.g, v.markers.spawn.color.b, 50, false, true, 2, false, nil, nil, false)
+    
+                    if  distanceBetwennPlayerAndMenu <= 15 then
+                        sleepWait = false
+                        DrawMarker(v.markersConfig.markerMenu.markerType, v.menuCoords.x, v.menuCoords.y, v.menuCoords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.markersConfig.markerMenu.markerSize.x, v.markersConfig.markerMenu.markerSize.y, v.markersConfig.markerMenu.markerSize.z, v.markersConfig.markerMenu.markerColor.r, v.markersConfig.markerMenu.markerColor.g, v.markersConfig.markerMenu.markerColor.b, 50, false, true, 2, false, nil, nil, false)
                     end
 
-                    if Options.have_rented then
-                        if return_distance < 3 then
-                            sleep = false
-                            DrawText3D(v.return_coords.x, v.return_coords.y, v.return_coords.z + 0.25, v.markers.return_spot.text)
-                            if IsControlJustReleased(0, v.markers.return_spot.key) then
+                    if cache.haveRented and not RY.Options.oxTarget.enable then
+                        if distanceBetwennPlayerAndReturnMenu < 3 then
+                            sleepWait = false
+                            DrawText3D(v.returnVehicleCoords.x, v.returnVehicleCoords.y, v.returnVehicleCoords.z + 0.25, v.markersConfig.markerReturnMenu.markerText)
+                            if IsControlJustReleased(0, v.markersConfig.markerReturnMenu.useKey) then
                                 returnVehicle(playerPed)
                             end
                         end
     
-                        if return_distance <= 15 then
-                            sleep = false
-                             DrawMarker(v.markers.return_spot.type, v.return_coords.x, v.return_coords.y, v.return_coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.markers.return_spot.size.x, v.markers.return_spot.size.y, v.markers.return_spot.size.z, v.markers.return_spot.color.r, v.markers.return_spot.color.g, v.markers.return_spot.color.b, 50, false, true, 2, false, nil, nil, false)
+                        if distanceBetwennPlayerAndReturnMenu < 15 then
+                            sleepWait = false
+                            DrawMarker(v.markersConfig.markerReturnMenu.markerType, v.returnVehicleCoords.x, v.returnVehicleCoords.y, v.returnVehicleCoords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.markersConfig.markerReturnMenu.markerSize.x, v.markersConfig.markerReturnMenu.markerSize.y, v.markersConfig.markerReturnMenu.markerSize.z, v.markersConfig.markerReturnMenu.markerColor.r, v.markersConfig.markerReturnMenu.markerColor.g, v.markersConfig.markerReturnMenu.markerColor.b, 50, false, true, 2, false, nil, nil, false)
                         end
                     end
+                end
             end
-        end
-        if sleep then
-            Citizen.Wait(150)
-        end
-    end
-end)
-
-for k, v in pairs(Config.Locations) do
-	rent = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
-	SetBlipSprite (rent, v.blips.spawn.sprite)
-	SetBlipDisplay(rent, 4)
-	SetBlipScale  (rent, 0.65)
-	SetBlipAsShortRange(rent, true)
-	SetBlipColour(rent, v.blips.spawn.color)
-	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentSubstringPlayerName(v.blips.spawn.name)
-	EndTextCommandSetBlipName(rent)
+            if sleepWait then
+                Citizen.Wait(150)
+            end
+        end 
+    end)
 end
 
+for k, v in pairs(RY.Locations) do
+    if RY.Options.oxTarget.enable then
+        exports.ox_target:addBoxZone({
+            coords = vector3(v.menuCoords.x, v.menuCoords.y, v.menuCoords.z),
+            size = vector3(3,3,3),
+            rotation = 45,
+            debug = false,
+            options = {
+                {
+                    name = 'rent' .. k,
+                    event = 'ry-vehiclerental:openMenu',
+                    args = { location = k },
+                    icon = RY.Options.oxTarget.icons.menu,
+                    label = RY.Options.oxTarget.labels.menu
+                }
+            }
+        })
+        exports.ox_target:addBoxZone({
+            coords = vector3(v.returnVehicleCoords.x, v.returnVehicleCoords.y, v.returnVehicleCoords.z),
+            size = vector3(3,3,3),
+            rotation = 45,
+            debug = false,
+            options = {
+                {
+                    name = 'rent-return' .. k,
+                    event = 'ry-vehiclerental:returnVehicle',
+                    icon = RY.Options.oxTarget.icons.menu,
+                    label = RY.Options.oxTarget.labels.returnMenu
+                }
+            }
+        })
+    end
+
+	rent = AddBlipForCoord(v.menuCoords.x, v.menuCoords.y, v.menuCoords.z)
+	SetBlipSprite (rent, v.blipsConfig.blipMenu.blipSprite)
+	SetBlipDisplay(rent, 4)
+	SetBlipScale  (rent, v.blipsConfig.blipMenu.blipScale)
+	SetBlipAsShortRange(rent, true)
+	SetBlipColour(rent, v.blipsConfig.blipMenu.blipColor)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentSubstringPlayerName(v.blipsConfig.blipMenu.blipName)
+	EndTextCommandSetBlipName(rent)
+end

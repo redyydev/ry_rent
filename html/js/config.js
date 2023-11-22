@@ -1,10 +1,6 @@
-/** Don't change */
 var Config = new Object();
-/** Don't change */
 
-/** Keys that will close the menu */
-Config.closeKeys = [113, 27, 90]; 
-/** Keys that will close the menu */
+Config.closeKeys = [113, 27, 90];
 
 Config.Currency = '$';
 
@@ -78,5 +74,19 @@ Config.Colors = {
     b: 0,
     name: 'orange',
     price: 350
-  }
+  },
+  11: {
+    r: 102,
+    g: 51,
+    b: 0,
+    name: 'brown',
+    price: 350
+  },
+  12: {
+    r: 255,
+    g: 255,
+    b: 255,
+    name: 'white',
+    price: 350
+  },
 }

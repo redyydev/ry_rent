@@ -1,147 +1,183 @@
-var options = {
-  vehicle_color: {
-    color: null,
-    price: null
-  },
-  current_vehicle: {
-    name: null,
-    r: 0,
-    g: 0,
-    b: 0
-  }
+var cache = {
+  currentVehicle: null,
+  currentColor: null,
+  currentColorR: null,
+  currentColorG: null,
+  currentColorB: null,
+  maxPerformance: 0,
+  totalPrice: 0
 }
 
-function main_menu(vehicles){
+timeleft = 0
+
+function openMenu(vehicles, maxPerformance) {
   $(".ui").fadeIn();
-  $(".options").hide();
+  $(".showedVehicle").hide()
+  $(".rentalVehicles").html("")
+  $(".rentalMenu").show()
 
-  options.vehicle_color.color = null
-  options.current_vehicle.name = null
+  cache.maxPerformance = maxPerformance
+  $("#maxperformance").html(`Max Performance - ${maxPerformance}${Config.Currency}`)
+  $("#checked").prop("checked", false);
 
-  $(".container-timer").css('display', 'none')
-  $(".vehicles").css('display', 'block');
-  $(".vehicles").html('');
+  cache.currentVehicle = null
+  cache.currentColor = null
+  cache.currentColorR = null
+  cache.currentColorG = null
+  cache.currentColorB = null
 
-  $.each(vehicles, function(index, vehicle) {
-    $(".vehicles").append(`
-    <div class="vehicle" id="vehicle-${vehicle.id}">
-      <div class="header">
-          <div class="header-title">${vehicle.label}</div>
-          <div class="header-description">${vehicle.description}</div>
+  if (!cache.currentVehicle)
+  $("#noVehicle").fadeIn()
+
+  vehicles.forEach(function(vehicle) {
+    $(".rentalVehicles").append(`
+      <div class="vehicle" id="vehicle-${vehicle.vehicleID}">
+        <div class="header">
+            <div class="header-title">${vehicle.vehicleLabel}</div>
+            <div class="header-description">${vehicle.vehicleDescription}</div>
+        </div>
+        <div class="image">
+            <img src="assets/${vehicle.vehicleImageName}" alt="${vehicle.vehicleModel}">
+        </div>
+        <div class="footer">
+            <div class="footer-type">${vehicle.vehicleType}</div>
+            <div class="footer-price">${vehicle.vehicleRentalPrice}${Config.Currency}</div>
+        </div>
       </div>
-      <div class="image">
-          <img src="assets/${vehicle.image}" alt="${vehicle.model}">
-      </div>
-      <div class="footer">
-          <div class="footer-type">${vehicle.type}</div>
-          <div class="footer-price">${vehicle.price}${Config.Currency}</div>
-      </div>
-    </div>
-    `);
+    `)
 
-    
-    $(`#vehicle-${vehicle.id}`).click(function () {
-      if (options.current_vehicle.name) {
-        $(`#vehicle-${options.current_vehicle.name}`).css("border", "1px solid rgba(255, 255, 255, 0)")
-        $(`#color-${options.vehicle_color.color}`).css("border", "1px solid rgba(255, 255, 255, 0)")
-    
-        options.vehicle_color.color = null
-        options.current_vehicle.name = null
-        ChooseOptions(vehicle, false)
-      } else {
-        options.current_vehicle.name = vehicle.id
-        $(`#vehicle-${vehicle.id}`).css("border", "1px solid rgba(255, 255, 255, 0.5)")
-        ChooseOptions(vehicle, true)
+    $(`#vehicle-${vehicle.vehicleID}`).click(function(e) {
+      $(".vehicle").css("opacity", "0.4")
+      if (cache.currentVehicle) {
+        $(`#vehicle-${cache.currentVehicle}`).css("border", "1px solid rgba(255, 255, 255, 0.0)")
+        cache.currentVehicle = null
       }
+      showVehicle(vehicle)
     })
-
   })
 }
 
-function ChooseOptions(vehicle, inoptions) {
-  var total = vehicle.price;
+function showVehicle(vehicle) {
+  var checkedValue = $('.maxperformance:checked').val();
 
-  if (inoptions) {
-    $(".colors").html("")
-    $(".options").show();
+  cache.currentVehicle = vehicle.vehicleID
+  $(`#vehicle-${cache.currentVehicle}`).css("opacity", "1.0")
 
-    $(".colors").append(`
-    <div class="option-exit" id="exit"><i class="bi bi-x-circle"></i></div>`)
+  $(`#vehicle-${cache.currentVehicle}`).css("border", "1px solid rgba(255, 255, 255, 1.0)")
+  $("#checked").prop("checked", false)
+  $("#noVehicle").hide()
 
-    $("#exit").click(function () {
-      $(".options").hide();
+  cache.currentColor = 4
+  cache.currentColorR = 0
+  cache.currentColorG = 0
+  cache.currentColorB = 0
 
-      $(`#vehicle-${options.current_vehicle.name}`).css("border", "1px solid rgba(255, 255, 255, 0)")
-        options.current_vehicle.name = null
+  cache.totalPrice = vehicle.vehicleRentalPrice
+
+  $("#vehicle-title").html(vehicle.vehicleLabel)
+  $(".vehicle-colors").html("")
+  $(".vehicle-currentColor").html(`Current Vehicle Color: <div class="vehicle-color" style="background: rgb(${cache.currentColorR}, ${cache.currentColorG}, ${cache.currentColorB}); position: absolute; width: 20px; height: 20px; margin-left: 130px; margin-top: -17px"></div>`)
+  $.each(Config.Colors, function(index, color) {
+    $(".vehicle-colors").append(`
+      <div class="vehicle-color" id="color-${color.name}" style="background: rgb(${color.r}, ${color.g}, ${color.b}"><div class="vehicle-color-price">${color.price >= 1 ? color.price + Config.Currency : 'Free' }</div></div>
+
+    `)
+
+    $(`#color-${color.name}`).click(function() {
+      if (cache.currentColor)
+      cache.totalPrice = cache.totalPrice - Config.Colors[cache.currentColor].price
+      cache.currentColor = null
+
+      cache.currentColor = index
+      cache.currentColorR = color.r
+      cache.currentColorG = color.g
+      cache.currentColorB = color.b
+      cache.totalPrice = cache.totalPrice + color.price
+
+      $(".vehicle-currentColor").html(`Current Vehicle Color: <div class="vehicle-color" style="background: rgb(${cache.currentColorR}, ${cache.currentColorG}, ${cache.currentColorB}); position: absolute; width: 20px; height: 20px; margin-left: 130px; margin-top: -17px"></div>`)
+      $(`#rent-${cache.currentVehicle}`).html(`Rent Vehicle (${cache.totalPrice}${Config.Currency})`)
     })
-  
-      $.each(Config.Colors, function(index, color) {
-        $(".colors").append(`
-            <div class="option-color" id="color-${color.name}" style="background: rgb(${color.r}, ${color.g}, ${color.b})"></div>
-        `)
-    
-        $(`#color-${color.name}`).click(function () {
-          if (options.vehicle_color.color) {
-            $(`#color-${options.vehicle_color.color}`).css("opacity", "0.5")
-            $(`#color-${color.name}`).css("box-shadow", `2px 5px 10px 0 rgba(0, 0, 0, 0.2)`)
-    
-            options.vehicle_color.color = null
-            total = vehicle.price 
-            $("#total").html(`Rent (${total}$)`)
-          } else {
-            options.vehicle_color.color = color.name;
-            options.vehicle_color.price = color.price;
+  })
 
-            options.current_vehicle.r = color.r;
-            options.current_vehicle.g = color.g;
-            options.current_vehicle.b = color.b;
+  $("#vehicle-footer").html("")
+  $("#vehicle-footer").append(`<button class="rent" id="rent-${cache.currentVehicle}">Rent Vehicle for ${cache.totalPrice}${Config.Currency}</button>`)
 
-            total = vehicle.price + color.price
-    
-            $("#total").html(`Rent (${total}$)`)
-            $(`#color-${color.name}`).css("opacity", "1.0")
-            $(`#color-${color.name}`).css("box-shadow", `0px 0px 15px 0 rgb(${color.r}, ${color.g}, ${color.b})`)
-          }
-        });
-      });
-  
-    $(".buttons").html(`<button id="total">Rent (${total}$)</button>`)
+  $(`#rent-${cache.currentVehicle}`).click(function() {
 
-    $("#total").click(function () {
-        if (options.vehicle_color.color) {
-        $.post('https://ry_rent/rent', JSON.stringify({
-          model: vehicle.model,
-          price: total,
-          location: vehicle.location,
-          r: options.current_vehicle.r,
-          g: options.current_vehicle.g,
-          b: options.current_vehicle.b
-         }));
-        }
-      })
-  } else {
-    $(".options").hide();
-  }
-  
+    $.post('https://ry_rent/rentVehicle', JSON.stringify({
+      vehicleID: cache.currentVehicle,
+      vehicleRentalPrice: cache.totalPrice,
+      vehicleColor: { r: cache.currentColorR, g: cache.currentColorG, b: cache.currentColorB },
+      vehicleMaxPerformance: checkedValue
+    }));
+  })
+
+  $(".showedVehicle").fadeIn()
 }
 
-function timer_menu(time){
-  $(".ui").fadeIn();
+function clickChecked() {
+  var checkedValue = $('.maxperformance:checked').val();
+
+  if (checkedValue == 'on') {
+    cache.totalPrice = cache.totalPrice + cache.maxPerformance
+  } else {
+    cache.totalPrice = cache.totalPrice - cache.maxPerformance
+  }
+  $(`#rent-${cache.currentVehicle}`).html(`Rent Vehicle for ${cache.totalPrice}${Config.Currency}`)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function showTimer(time) {
   $("#timer").html('')
-
-  $(".vehicles").css('display', 'none')
-  $(".options").css('display', 'none')
-  $(".container-timer").css('display', 'block')
-
+  $(".ui").fadeIn();
+  $(".rentalMenu").hide()
+  $(".container-timer").fadeIn()
+  
   timeleft = time
-
-  time_function = setInterval(function(){
+  timeFunction = setInterval(function(){
 
     if(timeleft <= 0){
       $("#timer").css("animation", 'none')
       $('.info').css('animation', 'none')
       $('.container-timer').fadeOut();
-      clearInterval(time_function);
+      clearInterval(timeFunction);
       $.post('https://ry_rent/finishRent', JSON.stringify({}));
 
     } else if (timeleft == 10) {
@@ -152,28 +188,36 @@ function timer_menu(time){
       $('#timer').css('animation', 'alert 0.2s infinite')
     } 
 
-    $('#timer').html(`${timeleft} seconds LEFT`)
+    $('#timer').html(`${timeFormat(timeleft)} LEFT`)
     timeleft -= 1;
 
   }, 1000);
 }
 
-function hide_timer_menu(){
+function hideTimerMenu() {
   $("#timer").html('')
   $('.container-timer').fadeOut();
-  clearInterval(time_function);
+  clearInterval(timeFunction);
   timeleft = 0
-} 
+}
 
-function notification(text) {
-    $(".notification").fadeIn();
-    $(".notification").css("right", "15%");
-    $(".notification").html(`<i class="bi bi-bell"></i> ${text}`);
-    setTimeout(function() {
-      $(".notification").fadeOut();
-  }, 2000)
+function timeFormat(duration) {
+  const hrs = ~~(duration / 3600);
+  const mins = ~~((duration % 3600) / 60);
+  const secs = ~~duration % 60;
+
+  let ret = "";
+
+  if (hrs > 0) {
+    ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+  }
+
+  ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+  ret += "" + secs;
+
+  return ret;
 }
 
 function closeMenu() {
-  $.post("http://ry_rent/CloseUI", JSON.stringify({}));
+  $.post("http://ry_rent/CloseMenu", JSON.stringify({}));
 }
