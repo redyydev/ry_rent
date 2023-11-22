@@ -13,7 +13,7 @@ RY.Options = {
     -- Default 25000MS | 25Seconds. 
     
     oxTarget = {
-        enable = true, -- if false it will enable markers/3dtext
+        enable = false, -- if false it will enable markers/3dtext
         icons = {
             menu = 'fa-solid fa-cube',
             returnMenu = 'fa-solid fa-cube'
