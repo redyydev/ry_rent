@@ -1,7 +1,7 @@
 # RY_RENT
 A fully configurable and customizable vehicle rental system.
 
-![alt text](https://imgur.com/Ft2y0L3.png)
+![alt text](https://imgur.com/fPi65Kr.png)
  
 **IMPORTANT**
 
