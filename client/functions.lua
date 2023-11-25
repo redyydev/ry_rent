@@ -74,7 +74,7 @@ function rentVehicle(vehicleID, vehicleRentalPrice, vehicleColor, vehicleMaxPerf
 				cache.vehicleRented = vehicle
 			end)
 		end
-		TriggerServerEvent('ry_rent:removeMoney', vehicleRentalPrice)
+		TriggerServerEvent('ry-vehiclerental:removeMoney', vehicleRentalPrice)
 		
 		cache.haveRented = true
 		cache.pricePaid = vehicleRentalPrice
