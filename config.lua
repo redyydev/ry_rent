@@ -29,7 +29,7 @@ RY.Messages = {
     returnSuccess = "Successfully returned the vehicle, thank you!",
     returnError  = "You need to be in the vehicle you rented.",
     noMoney = "You don't have enought money to rent the vehicle.",
-    refund = "Received refund of",
+    refund = "Received refund of %payment%$",
     rentFinished = "Your rental time is up, thank you.",
     alreadyRented = "You already rented a vehicle."
 }

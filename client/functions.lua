@@ -97,8 +97,11 @@ function returnVehicle(player)
 		cache.vehicleRented = nil
 
 		if RY.Options.refundMoneyWhenDelivered then
+			local refundMessage = RY.Messages.refund
+			refundMessage = string.gsub(refundMessage, "%%payment%%", cache.pricePaid)
+
 			TriggerServerEvent('ry-vehiclerental:giveMoney', cache.pricePaid)
-			notification(RY.Messages.refund .. " " .. cache.pricePaid .. '$')
+			notification(refundMessage)
 		end
 
 		returnBlip(true)
