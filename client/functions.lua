@@ -60,7 +60,7 @@ function rentVehicle(vehicleID, vehicleRentalPrice, vehicleColor, vehicleMaxPerf
 				cache.vehicleRented = vehicle
 			end)
 		elseif RY.Options.FrameWork == 'qb' then
-			Framework.Functions.SpawnVehicle(vehicleModel, spawnCoords, spawnCoords.h, function(vehicle)
+			Framework.Functions.SpawnVehicle(vehicleModel, function(vehicle)
 				SetEntityAsMissionEntity(vehicle, true, true)
 				TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
 
@@ -72,7 +72,7 @@ function rentVehicle(vehicleID, vehicleRentalPrice, vehicleColor, vehicleMaxPerf
 				end
 
 				cache.vehicleRented = vehicle
-			end)
+			end, spawnCoords, true)
 		end
 		TriggerServerEvent('ry-vehiclerental:removeMoney', vehicleRentalPrice)
 		
